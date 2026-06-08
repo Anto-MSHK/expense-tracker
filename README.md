@@ -2,7 +2,12 @@
 
 Полноценный **offline-first PWA** трекер расходов на TypeScript: React + Vite на фронте, Node.js + Express + PostgreSQL на бэке. Статьи создаются и читаются даже без сети — изменения копятся в локальной очереди и **автоматически синхронизируются** с сервером при восстановлении соединения.
 
-![Скриншот приложения](docs/screenshot.png)
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshot.png" alt="Онлайн" /><p align="center"><sub>🟢 Онлайн — данные синхронизированы</sub></p></td>
+    <td width="50%"><img src="docs/offline.png" alt="Офлайн" /><p align="center"><sub>🟠 Сервер недоступен — новая статья в очереди («не синхр.»)</sub></p></td>
+  </tr>
+</table>
 
 ---
 

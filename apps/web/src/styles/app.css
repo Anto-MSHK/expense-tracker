@@ -33,12 +33,50 @@ body {
   color: var(--text);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Живой aurora-фон: два медленно дрейфующих размытых пятна. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -30vmax;
+  z-index: -1;
+  background:
+    radial-gradient(38vmax 38vmax at 20% 20%, rgba(99, 102, 241, 0.22), transparent 60%),
+    radial-gradient(32vmax 32vmax at 80% 70%, rgba(34, 211, 238, 0.16), transparent 60%);
+  filter: blur(10px);
+  animation: aurora 22s ease-in-out infinite alternate;
+}
+
+@keyframes aurora {
+  0% {
+    transform: translate3d(-4%, -2%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, 4%, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(2%, -3%, 0) scale(1.02);
+  }
 }
 
 .app {
   max-width: 980px;
   margin: 0 auto;
   padding: 24px 20px 48px;
+  animation: fadeIn 0.5s ease both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* --- Header --- */
@@ -152,11 +190,18 @@ body {
 }
 
 .card {
-  background: var(--surface);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 22px;
   box-shadow: var(--shadow);
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.card:hover {
+  border-color: color-mix(in srgb, var(--primary) 40%, var(--border));
 }
 
 .card__title {
@@ -222,14 +267,22 @@ body {
 }
 
 .button--primary {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), #22d3ee);
+  background-size: 160% 160%;
   color: white;
+  box-shadow: 0 8px 20px -8px rgba(99, 102, 241, 0.7);
+  transition: background-position 0.4s, box-shadow 0.2s, transform 0.05s;
 }
 .button--primary:hover:not(:disabled) {
-  background: var(--primary-hover);
+  background-position: 100% 0;
+  box-shadow: 0 10px 26px -8px rgba(99, 102, 241, 0.85);
 }
 .button--primary:active:not(:disabled) {
   transform: translateY(1px);
+}
+.button:focus-visible {
+  outline: 2px solid var(--primary-hover);
+  outline-offset: 2px;
 }
 .button:disabled {
   opacity: 0.6;
@@ -270,15 +323,36 @@ body {
   grid-template-columns: 1fr auto auto;
   align-items: center;
   gap: 12px;
-  padding: 14px 4px;
+  padding: 14px 4px 14px 10px;
   border-bottom: 1px solid var(--border);
+  border-left: 2px solid transparent;
+  border-radius: 8px;
+  /* Появляется только новый элемент (React не перемонтирует существующие по key). */
+  animation: expenseEnter 0.28s ease both;
+  transition: background 0.15s;
+}
+.expense:hover {
+  background: color-mix(in srgb, var(--surface-2) 60%, transparent);
 }
 .expense:last-child {
   border-bottom: none;
 }
 
+@keyframes expenseEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Незасинхронизированная статья — мягкий янтарный акцент и «дыхание». */
 .expense--pending {
-  opacity: 0.7;
+  border-left-color: var(--amber);
+  background: rgba(245, 158, 11, 0.05);
 }
 
 .expense__main {
@@ -318,6 +392,17 @@ body {
   background: rgba(245, 158, 11, 0.15);
   padding: 1px 6px;
   border-radius: 6px;
+  animation: breathe 1.6s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .expense__delete {
@@ -347,9 +432,12 @@ body {
   font-size: 15px;
 }
 .list__total strong {
-  font-size: 20px;
+  font-size: 22px;
   font-variant-numeric: tabular-nums;
-  color: var(--primary-hover);
+  background: linear-gradient(135deg, var(--primary-hover), #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .app__footer {
@@ -357,4 +445,14 @@ body {
   text-align: center;
   font-size: 12px;
   color: var(--text-muted);
+}
+
+/* Уважаем системную настройку «уменьшить движение». */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
