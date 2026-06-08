@@ -155,8 +155,11 @@ body::before {
   display: flex;
   flex-direction: column;
 }
-.form .button {
+.form__actions {
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 @media (max-width: 720px) {
@@ -260,6 +263,15 @@ body::before {
   outline: 2px solid var(--primary-hover);
   outline-offset: 2px;
 }
+.button--ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.button--ghost:hover:not(:disabled) {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--primary) 40%, var(--border));
+}
 .button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -278,6 +290,23 @@ body::before {
   background: var(--surface-2);
   padding: 2px 10px;
   border-radius: 999px;
+}
+
+.list__controls {
+  display: flex;
+  gap: 10px;
+  margin: 4px 0 12px;
+}
+.list__search {
+  flex: 1;
+  padding: 9px 12px;
+  font-size: 14px;
+}
+.list__sort {
+  width: auto;
+  padding: 9px 12px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .list__empty {
@@ -396,7 +425,24 @@ body::before {
   }
 }
 
-.expense__delete {
+.expense__actions {
+  display: flex;
+  gap: 6px;
+  /* кнопки проявляются на hover/в фокусе строки, на тач-устройствах — всегда */
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.expense:hover .expense__actions,
+.expense:focus-within .expense__actions {
+  opacity: 1;
+}
+@media (hover: none) {
+  .expense__actions {
+    opacity: 1;
+  }
+}
+
+.expense__action {
   width: 30px;
   height: 30px;
   border-radius: 8px;
@@ -407,10 +453,23 @@ body::before {
   font-size: 13px;
   transition: all 0.15s;
 }
-.expense__delete:hover {
+.expense__action:hover {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+}
+.expense__action--delete:hover {
   background: rgba(239, 68, 68, 0.15);
   color: var(--red);
   border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* Строка, открытая на редактирование */
+.expense--editing {
+  border-left-color: var(--primary);
+  background: rgba(99, 102, 241, 0.08);
+}
+.expense--editing .expense__actions {
+  opacity: 1;
 }
 
 .list__total {
@@ -436,6 +495,47 @@ body::before {
   text-align: center;
   font-size: 12px;
   color: var(--text-muted);
+}
+
+/* --- Undo toast --- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  font-size: 14px;
+  z-index: 50;
+  animation: toastIn 0.25s ease;
+}
+.toast__btn {
+  border: none;
+  background: none;
+  color: var(--primary-hover);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+}
+.toast__btn:hover {
+  text-decoration: underline;
+}
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 /* Уважаем системную настройку «уменьшить движение». */

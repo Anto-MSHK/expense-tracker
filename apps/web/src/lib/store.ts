@@ -101,6 +101,61 @@ export async function addExpense(form: ExpenseFormValues): Promise<void> {
   void requestSync();
 }
 
+/**
+ * Редактирование статьи. Сохраняем исходный createdAt, помечаем pending и
+ * ставим в очередь create-операцию (сервер делает upsert по id).
+ */
+export async function updateExpense(id: string, form: ExpenseFormValues): Promise<void> {
+  const existing = snapshot.find((e) => e.id === id);
+  if (!existing) return;
+  const now = new Date().toISOString();
+
+  const local: LocalExpense = {
+    ...existing,
+    name: form.name,
+    sum: form.sum,
+    date: form.date,
+    updatedAt: now,
+    pendingOp: "create",
+  };
+
+  await putExpense(local);
+  // Заменяем возможные устаревшие операции по этой статье одной свежей.
+  await removeOpsForExpense(id);
+  await enqueueOp({
+    opId: crypto.randomUUID(),
+    type: "create",
+    expenseId: id,
+    payload: { id, name: form.name, sum: form.sum, date: form.date, createdAt: existing.createdAt },
+    createdAt: now,
+  });
+
+  await reload();
+  void requestSync();
+}
+
+/** Восстановление только что удалённой статьи (для undo). */
+export async function restoreExpense(expense: LocalExpense): Promise<void> {
+  const now = new Date().toISOString();
+  await putExpense({ ...expense, updatedAt: now, pendingOp: "create" });
+  await enqueueOp({
+    opId: crypto.randomUUID(),
+    type: "create",
+    expenseId: expense.id,
+    payload: {
+      id: expense.id,
+      name: expense.name,
+      sum: expense.sum,
+      date: expense.date,
+      createdAt: expense.createdAt,
+    },
+    createdAt: now,
+  });
+
+  await reload();
+  void requestSync();
+}
+
 /** Удаление статьи (оптимистично). */
 export async function removeExpense(id: string): Promise<void> {
   const existing = snapshot.find((e) => e.id === id);

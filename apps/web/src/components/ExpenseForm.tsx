@@ -1,6 +1,7 @@
 import { NAME_MAX, NAME_MIN, SUM_MAX, SUM_MIN, expenseFormSchema } from "@expense/shared";
-import { type FormEvent, useState } from "react";
-import { addExpense } from "../lib/store.js";
+import { type FormEvent, useEffect, useState } from "react";
+import type { LocalExpense } from "../lib/idb.js";
+import { addExpense, updateExpense } from "../lib/store.js";
 
 /** Сегодняшняя дата в локальном поясе как YYYY-MM-DD */
 function todayISO(): string {
@@ -11,48 +12,74 @@ function todayISO(): string {
 
 type FieldErrors = Partial<Record<"name" | "sum" | "date", string>>;
 
-export function ExpenseForm() {
+interface Props {
+  /** Редактируемая статья (null — режим создания) */
+  editing: LocalExpense | null;
+  /** Вызывается после сохранения/отмены — родитель сбрасывает режим редактирования */
+  onDone: () => void;
+}
+
+export function ExpenseForm({ editing, onDone }: Props) {
   const [name, setName] = useState("");
   const [sum, setSum] = useState("");
   const [date, setDate] = useState(todayISO());
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
 
+  const isEdit = editing !== null;
+
+  // Подставляем значения при входе в режим редактирования.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: синхронизируемся по id статьи
+  useEffect(() => {
+    if (editing) {
+      setName(editing.name);
+      setSum(String(editing.sum));
+      setDate(editing.date);
+      setErrors({});
+    }
+  }, [editing?.id]);
+
+  function reset() {
+    setName("");
+    setSum("");
+    setDate(todayISO());
+    setErrors({});
+  }
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
-    const candidate = {
-      name,
-      sum: sum === "" ? Number.NaN : Number(sum),
-      date,
-    };
-
+    const candidate = { name, sum: sum === "" ? Number.NaN : Number(sum), date };
     const result = expenseFormSchema.safeParse(candidate);
     if (!result.success) {
       const flat = result.error.flatten().fieldErrors;
-      setErrors({
-        name: flat.name?.[0],
-        sum: flat.sum?.[0],
-        date: flat.date?.[0],
-      });
+      setErrors({ name: flat.name?.[0], sum: flat.sum?.[0], date: flat.date?.[0] });
       return;
     }
 
     setErrors({});
     setSubmitting(true);
     try {
-      await addExpense(result.data);
-      setName("");
-      setSum("");
-      setDate(todayISO());
+      if (editing) {
+        await updateExpense(editing.id, result.data);
+      } else {
+        await addExpense(result.data);
+      }
+      reset();
+      onDone();
     } finally {
       setSubmitting(false);
     }
   }
 
+  function handleCancel() {
+    reset();
+    onDone();
+  }
+
   return (
     <form className="form card" onSubmit={handleSubmit} noValidate>
-      <h2 className="card__title">Новая статья расхода</h2>
+      <h2 className="card__title">{isEdit ? "Редактирование статьи" : "Новая статья расхода"}</h2>
 
       <div className="field">
         <label className="field__label" htmlFor="name">
@@ -110,9 +137,16 @@ export function ExpenseForm() {
         <span className="field__hint">{errors.date ?? "Любая дата"}</span>
       </div>
 
-      <button className="button button--primary" type="submit" disabled={submitting}>
-        {submitting ? "Сохраняю…" : "Добавить расход"}
-      </button>
+      <div className="form__actions">
+        <button className="button button--primary" type="submit" disabled={submitting}>
+          {submitting ? "Сохраняю…" : isEdit ? "Сохранить изменения" : "Добавить расход"}
+        </button>
+        {isEdit && (
+          <button className="button button--ghost" type="button" onClick={handleCancel}>
+            Отмена
+          </button>
+        )}
+      </div>
     </form>
   );
 }
