@@ -1,8 +1,13 @@
-import { type CreateExpenseInput, createExpenseSchema, type Expense, sumExpenses } from "@expense/shared";
+import {
+  type CreateExpenseInput,
+  type Expense,
+  createExpenseSchema,
+  sumExpenses,
+} from "@expense/shared";
 import { desc, eq } from "drizzle-orm";
 import { Router } from "express";
 import { db } from "../db/index.js";
-import { expenses, type ExpenseRow } from "../db/schema.js";
+import { type ExpenseRow, expenses } from "../db/schema.js";
 import { validateBody } from "../middleware/validate.js";
 
 export const expensesRouter = Router();
@@ -62,7 +67,8 @@ expensesRouter.post("/", validateBody(createExpenseSchema), async (_req, res, ne
       })
       .returning();
 
-    res.status(201).json(rowToExpense(row!));
+    if (!row) throw new Error("Не удалось сохранить статью");
+    res.status(201).json(rowToExpense(row));
   } catch (err) {
     next(err);
   }

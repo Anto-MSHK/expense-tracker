@@ -3,7 +3,9 @@ import { createHandlerBoundToURL, precacheAndRoute } from "workbox-precaching";
 import { NavigationRoute, registerRoute } from "workbox-routing";
 import { replayOutbox } from "./lib/sync.js";
 
-declare const self: ServiceWorkerGlobalScope & { __WB_MANIFEST: Array<{ url: string; revision: string | null }> };
+declare const self: ServiceWorkerGlobalScope & {
+  __WB_MANIFEST: Array<{ url: string; revision: string | null }>;
+};
 
 // Прекеш оболочки приложения (manifest подставляет vite-plugin-pwa).
 precacheAndRoute(self.__WB_MANIFEST);

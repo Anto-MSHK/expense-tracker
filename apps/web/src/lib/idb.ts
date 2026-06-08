@@ -86,6 +86,8 @@ export async function removeOpsForExpense(expenseId: string): Promise<void> {
   const db = await getDb();
   const tx = db.transaction("outbox", "readwrite");
   const ops = await tx.store.getAll();
-  await Promise.all(ops.filter((op) => op.expenseId === expenseId).map((op) => tx.store.delete(op.opId)));
+  await Promise.all(
+    ops.filter((op) => op.expenseId === expenseId).map((op) => tx.store.delete(op.opId)),
+  );
   await tx.done;
 }

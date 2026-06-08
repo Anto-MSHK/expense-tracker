@@ -1,9 +1,9 @@
 import { ApiError, createExpenseRemote, deleteExpenseRemote, fetchExpenses } from "./api.js";
 import {
+  type OutboxOp,
   deleteExpenseLocal,
   getAllExpenses,
   getOutboxOps,
-  type OutboxOp,
   putExpense,
   removeOp,
 } from "./idb.js";

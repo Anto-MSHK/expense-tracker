@@ -1,9 +1,9 @@
 import type { ExpenseFormValues } from "@expense/shared";
 import {
+  type LocalExpense,
   deleteExpenseLocal,
   enqueueOp,
   getAllExpenses,
-  type LocalExpense,
   putExpense,
   removeOpsForExpense,
 } from "./idb.js";
@@ -51,7 +51,9 @@ async function registerBackgroundSync(): Promise<void> {
   try {
     const reg = await navigator.serviceWorker.ready;
     // SyncManager есть не во всех браузерах — пробуем мягко.
-    await (reg as unknown as { sync?: { register(tag: string): Promise<void> } }).sync?.register("expense-sync");
+    await (reg as unknown as { sync?: { register(tag: string): Promise<void> } }).sync?.register(
+      "expense-sync",
+    );
   } catch {
     /* не поддерживается — синхронизация всё равно произойдёт на reconnect */
   }

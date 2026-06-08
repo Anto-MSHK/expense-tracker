@@ -1,4 +1,4 @@
-import { expenseFormSchema, NAME_MAX, NAME_MIN, SUM_MAX, SUM_MIN } from "@expense/shared";
+import { NAME_MAX, NAME_MIN, SUM_MAX, SUM_MIN, expenseFormSchema } from "@expense/shared";
 import { type FormEvent, useState } from "react";
 import { addExpense } from "../lib/store.js";
 

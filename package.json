@@ -17,9 +17,12 @@
     "db:generate": "pnpm --filter @expense/api db:generate",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
-    "lint": "pnpm -r lint"
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write ."
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "concurrently": "^9.1.2",
     "typescript": "^5.7.3"
   }

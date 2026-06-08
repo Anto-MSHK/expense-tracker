@@ -22,7 +22,9 @@ const sumSchema = z
   .gte(SUM_MIN, `Минимум ${SUM_MIN.toFixed(2)} у.е.`)
   .lte(SUM_MAX, `Максимум ${SUM_MAX.toLocaleString("ru-RU")}.00 у.е.`)
   .refine(
-    (value) => Number.isInteger(Math.round(value * 100)) && Math.abs(value * 100 - Math.round(value * 100)) < 1e-6,
+    (value) =>
+      Number.isInteger(Math.round(value * 100)) &&
+      Math.abs(value * 100 - Math.round(value * 100)) < 1e-6,
     { message: "Не более двух знаков после запятой" },
   );
 

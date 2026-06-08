@@ -5,7 +5,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 // Мокаем сетевой слой — тестируем именно логику offline-синхронизации.
 vi.mock("./api.js", () => ({
   ApiError: class ApiError extends Error {
-    constructor(msg: string, public status: number, public retryable: boolean) {
+    constructor(
+      msg: string,
+      public status: number,
+      public retryable: boolean,
+    ) {
       super(msg);
     }
   },
@@ -47,7 +51,13 @@ describe("replayOutbox", () => {
       opId: "op-1",
       type: "create",
       expenseId: sample.id,
-      payload: { id: sample.id, name: sample.name, sum: sample.sum, date: sample.date, createdAt: sample.createdAt },
+      payload: {
+        id: sample.id,
+        name: sample.name,
+        sum: sample.sum,
+        date: sample.date,
+        createdAt: sample.createdAt,
+      },
       createdAt: sample.createdAt,
     });
 
@@ -69,7 +79,13 @@ describe("replayOutbox", () => {
       opId: "op-1",
       type: "create",
       expenseId: sample.id,
-      payload: { id: sample.id, name: sample.name, sum: sample.sum, date: sample.date, createdAt: sample.createdAt },
+      payload: {
+        id: sample.id,
+        name: sample.name,
+        sum: sample.sum,
+        date: sample.date,
+        createdAt: sample.createdAt,
+      },
       createdAt: sample.createdAt,
     });
 
@@ -88,7 +104,13 @@ describe("replayOutbox", () => {
       opId: "op-1",
       type: "create",
       expenseId: sample.id,
-      payload: { id: sample.id, name: sample.name, sum: sample.sum, date: sample.date, createdAt: sample.createdAt },
+      payload: {
+        id: sample.id,
+        name: sample.name,
+        sum: sample.sum,
+        date: sample.date,
+        createdAt: sample.createdAt,
+      },
       createdAt: sample.createdAt,
     });
 
@@ -116,7 +138,13 @@ describe("pullFromServer", () => {
       opId: "op-1",
       type: "create",
       expenseId: sample.id,
-      payload: { id: sample.id, name: sample.name, sum: sample.sum, date: sample.date, createdAt: sample.createdAt },
+      payload: {
+        id: sample.id,
+        name: sample.name,
+        sum: sample.sum,
+        date: sample.date,
+        createdAt: sample.createdAt,
+      },
       createdAt: sample.createdAt,
     });
 
