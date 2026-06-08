@@ -14,8 +14,7 @@ interface Props {
 /** Живой индикатор подключения к сети/бэкенду + счётчик несинхронизированных статей. */
 export function ConnectionBadge({ status, pendingCount }: Props) {
   return (
-    <div className="badge" role="status" aria-live="polite">
-      <span className={`badge__dot badge__dot--${status}`} aria-hidden="true" />
+    <div className={`badge badge--${status}`} role="status" aria-live="polite">
       <span className="badge__label">{LABELS[status]}</span>
       {pendingCount > 0 && (
         <span className="badge__pending" title="Ожидают синхронизации с сервером">

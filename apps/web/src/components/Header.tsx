@@ -17,10 +17,7 @@ export function Header({ status, pendingCount }: Props) {
           height={46}
           alt="Expense Tracker"
         />
-        <div>
-          <h1 className="header__title">Трекер расходов</h1>
-          <p className="header__subtitle">Offline-first PWA</p>
-        </div>
+        <h1 className="header__title">Трекер расходов</h1>
       </div>
       <ConnectionBadge status={status} pendingCount={pendingCount} />
     </header>
