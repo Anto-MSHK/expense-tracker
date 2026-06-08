@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@vercel/node": "^5.1.4",
     "concurrently": "^9.1.2",
     "typescript": "^5.7.3"
   }

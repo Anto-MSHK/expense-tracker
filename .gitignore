@@ -32,3 +32,6 @@ playwright/.cache/
 
 # postgres volume (если кто-то смонтирует локально)
 .pgdata/
+
+# vercel
+.vercel/

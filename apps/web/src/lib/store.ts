@@ -137,6 +137,7 @@ export async function updateExpense(id: string, form: ExpenseFormValues): Promis
 /** Восстановление только что удалённой статьи (для undo). */
 export async function restoreExpense(expense: LocalExpense): Promise<void> {
   const now = new Date().toISOString();
+
   await putExpense({ ...expense, updatedAt: now, pendingOp: "create" });
   await enqueueOp({
     opId: crypto.randomUUID(),
