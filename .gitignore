@@ -25,6 +25,10 @@ pnpm-debug.log*
 
 # test / coverage
 coverage/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
 
 # postgres volume (если кто-то смонтирует локально)
 .pgdata/

@@ -1,5 +1,7 @@
 # 💸 Expense Tracker — offline-first PWA трекер расходов
 
+[![CI](https://github.com/Anto-MSHK/expense-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/Anto-MSHK/expense-tracker/actions/workflows/ci.yml)
+
 Полноценный **offline-first PWA** трекер расходов на TypeScript: React + Vite на фронте, Node.js + Express + PostgreSQL на бэке. Статьи создаются и читаются даже без сети — изменения копятся в локальной очереди и **автоматически синхронизируются** с сервером при восстановлении соединения.
 
 <table>
@@ -144,13 +146,18 @@ expense-tracker/
 ## 🧪 Тесты
 
 ```bash
-pnpm test          # все пакеты
-pnpm typecheck     # строгая типизация
+pnpm test                          # unit/integration во всех пакетах
+pnpm typecheck                     # строгая типизация
+pnpm lint                          # Biome
+pnpm --filter @expense/web test:e2e  # E2E offline-сценарий (нужны запущенные API+БД)
 ```
 
 - `shared` — валидация ограничений ТЗ (длина названия, диапазон суммы, точность денег).
 - `api` — валидация и роутинг (supertest, без обращения к БД).
 - `web` — движок синхронизации на `fake-indexeddb`: реплей очереди, обработка сетевых/4xx-ошибок, реконсиляция с сервером.
+- **E2E** (Playwright) — сквозной offline-first сценарий: online-создание → потеря сети → offline-очередь → возврат сети → автосинхронизация.
+
+Всё это гоняется в **CI** (GitHub Actions) на каждый push/PR: линт, типизация, тесты, сборка + E2E с реальным PostgreSQL.
 
 ---
 
