@@ -39,7 +39,7 @@ export function App() {
   return (
     <div className="app">
       <Header status={status} pendingCount={pendingCount} />
-      <main className="app__grid">
+      <main className={`app__grid ${items.length === 0 ? "app__grid--equal" : ""}`}>
         <ExpenseForm editing={editing} onDone={() => setEditingId(null)} />
         <ExpenseList
           items={items}
