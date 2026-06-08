@@ -1,8 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm --filter @expense/web build",
+  "buildCommand": "pnpm --filter @expense/api build && pnpm --filter @expense/web build",
   "outputDirectory": "apps/web/dist",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,
-  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api" },
+    { "source": "/((?!api).*)", "destination": "/index.html" }
+  ]
 }
