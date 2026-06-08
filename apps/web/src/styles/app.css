@@ -287,6 +287,11 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 14px;
+}
+/* Внутри флекс-хедера убираем нижний отступ заголовка — иначе счётчик съезжает по вертикали */
+.list__header .card__title {
+  margin-bottom: 0;
 }
 
 .list__count {
