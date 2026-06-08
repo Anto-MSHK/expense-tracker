@@ -75,7 +75,7 @@ export function ExpenseForm() {
 
       <div className="field">
         <label className="field__label" htmlFor="sum">
-          Сумма, у.е.
+          Сумма, ₽
         </label>
         <input
           id="sum"
@@ -91,7 +91,7 @@ export function ExpenseForm() {
           aria-invalid={Boolean(errors.sum)}
         />
         <span className="field__hint">
-          {errors.sum ?? `От ${SUM_MIN.toFixed(2)} до ${SUM_MAX.toLocaleString("ru-RU")}.00`}
+          {errors.sum ?? `От ${SUM_MIN.toFixed(2)} до ${SUM_MAX.toLocaleString("ru-RU")}.00 ₽`}
         </span>
       </div>
 

@@ -8,7 +8,7 @@ import { z } from "zod";
 // --- Ограничения из ТЗ ---
 export const NAME_MIN = 3;
 export const NAME_MAX = 30;
-/** Сумма в основных единицах (у.е.) */
+/** Сумма в основных единицах (рублях) */
 export const SUM_MIN = 1; // 1.00
 export const SUM_MAX = 1_000_000; // 1 000 000.00
 
@@ -19,8 +19,8 @@ export const SUM_MAX = 1_000_000; // 1 000 000.00
  */
 const sumSchema = z
   .number({ invalid_type_error: "Сумма должна быть числом" })
-  .gte(SUM_MIN, `Минимум ${SUM_MIN.toFixed(2)} у.е.`)
-  .lte(SUM_MAX, `Максимум ${SUM_MAX.toLocaleString("ru-RU")}.00 у.е.`)
+  .gte(SUM_MIN, `Минимум ${SUM_MIN.toFixed(2)} ₽`)
+  .lte(SUM_MAX, `Максимум ${SUM_MAX.toLocaleString("ru-RU")}.00 ₽`)
   .refine(
     (value) =>
       Number.isInteger(Math.round(value * 100)) &&
@@ -84,10 +84,12 @@ export function sumExpenses(expenses: Array<Pick<Expense, "sum">>): number {
   return fromMinorUnits(totalMinor);
 }
 
-/** Форматирование суммы для UI: 1234.5 -> "1 234,50 у.е." */
-export function formatMoney(sum: number, currency = "у.е."): string {
-  return `${sum.toLocaleString("ru-RU", {
+/** Форматирование суммы для UI: 1234.5 -> "1 234,50 ₽" */
+export function formatMoney(sum: number): string {
+  return new Intl.NumberFormat("ru-RU", {
+    style: "currency",
+    currency: "RUB",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  })} ${currency}`;
+  }).format(sum);
 }

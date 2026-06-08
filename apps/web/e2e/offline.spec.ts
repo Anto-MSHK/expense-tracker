@@ -13,7 +13,7 @@ test("offline-first: создание онлайн, офлайн и автоси
   // 2. Создаём статью онлайн — появляется в списке
   const onlineName = `E2E-online-${Date.now()}`;
   await page.getByLabel("Название статьи").fill(onlineName);
-  await page.getByLabel("Сумма, у.е.").fill("100");
+  await page.getByLabel("Сумма, ₽").fill("100");
   await page.getByRole("button", { name: "Добавить расход" }).click();
   await expect(page.getByText(onlineName)).toBeVisible();
 
@@ -24,7 +24,7 @@ test("offline-first: создание онлайн, офлайн и автоси
   // 4. Создаём статью офлайн — она в очереди и помечена «не синхр.»
   const offlineName = `E2E-offline-${Date.now()}`;
   await page.getByLabel("Название статьи").fill(offlineName);
-  await page.getByLabel("Сумма, у.е.").fill("50");
+  await page.getByLabel("Сумма, ₽").fill("50");
   await page.getByRole("button", { name: "Добавить расход" }).click();
   await expect(page.getByText(offlineName)).toBeVisible();
   await expect(page.getByText("не синхр.")).toBeVisible();

@@ -72,6 +72,6 @@ describe("money-хелперы", () => {
   it("formatMoney форматирует по-русски", () => {
     // toLocaleString использует узкий неразрывный пробел — нормализуем перед сравнением.
     const normalized = formatMoney(1234.5).replace(/\s/g, " ");
-    expect(normalized).toBe("1 234,50 у.е.");
+    expect(normalized).toBe("1 234,50 ₽");
   });
 });
