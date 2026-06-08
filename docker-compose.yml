@@ -17,5 +17,34 @@ services:
       timeout: 5s
       retries: 10
 
+  # Сервисы приложения — под профилем "app".
+  # `docker compose up`               → только БД (для локальной разработки)
+  # `docker compose --profile app up` → весь стек (БД + API + фронт)
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    profiles: ["app"]
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-expense}:${POSTGRES_PASSWORD:-expense}@postgres:5432/${POSTGRES_DB:-expense_tracker}
+      API_PORT: 3001
+      CORS_ORIGIN: http://localhost:8080
+      MIGRATE_ON_START: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    profiles: ["app"]
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
 volumes:
   pgdata:

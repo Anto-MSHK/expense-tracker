@@ -1,0 +1,12 @@
+**/node_modules
+**/dist
+**/dev-dist
+**/.turbo
+.git
+.github
+docs
+.playwright-mcp
+*.log
+.env
+.env.*
+!.env.example

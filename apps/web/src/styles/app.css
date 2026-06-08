@@ -42,8 +42,7 @@ body::before {
   position: fixed;
   inset: -30vmax;
   z-index: -1;
-  background:
-    radial-gradient(38vmax 38vmax at 20% 20%, rgba(99, 102, 241, 0.22), transparent 60%),
+  background: radial-gradient(38vmax 38vmax at 20% 20%, rgba(99, 102, 241, 0.22), transparent 60%),
     radial-gradient(32vmax 32vmax at 80% 70%, rgba(34, 211, 238, 0.16), transparent 60%);
   filter: blur(10px);
   animation: aurora 22s ease-in-out infinite alternate;
