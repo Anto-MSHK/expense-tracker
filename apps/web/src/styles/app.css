@@ -517,7 +517,7 @@ body::before {
 .toast {
   position: fixed;
   left: 50%;
-  bottom: 24px;
+  bottom: 10px;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
