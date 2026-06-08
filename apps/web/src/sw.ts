@@ -18,6 +18,9 @@ try {
   /* нет прекешированного app shell (dev) — навигационный fallback не нужен */
 }
 
+// autoUpdate + injectManifest: новый SW должен активироваться сразу,
+// иначе пользователь видит старую версию до следующего полного перезапуска.
+self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", () => self.clients.claim());
 
 /** Сообщает открытым вкладкам, что синхронизация завершилась — они перечитают данные. */

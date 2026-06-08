@@ -10,9 +10,13 @@ export function Header({ status, pendingCount }: Props) {
   return (
     <header className="header">
       <div className="header__brand">
-        <span className="header__logo" aria-hidden="true">
-          ₽
-        </span>
+        <img
+          className="header__logo"
+          src="/logo.png"
+          width={46}
+          height={46}
+          alt="Expense Tracker"
+        />
         <div>
           <h1 className="header__title">Трекер расходов</h1>
           <p className="header__subtitle">Offline-first PWA</p>

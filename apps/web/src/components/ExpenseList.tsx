@@ -21,7 +21,14 @@ export function ExpenseList({ items, total }: Props) {
       </div>
 
       {items.length === 0 ? (
-        <p className="list__empty">Пока нет ни одной статьи. Добавьте первую слева 👈</p>
+        <div className="list__empty">
+          <img className="list__empty-img" src="/empty-state.png" alt="" />
+          <p>
+            Пока нет ни одной статьи.
+            <br />
+            Добавьте первую — она появится здесь.
+          </p>
+        </div>
       ) : (
         <ul className="list__items">
           {items.map((item) => (
