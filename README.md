@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/Anto-MSHK/expense-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/Anto-MSHK/expense-tracker/actions/workflows/ci.yml)
 
+🔗 **Живое демо:** [expense-tracker-rho-gold-28.vercel.app](https://expense-tracker-rho-gold-28.vercel.app) (Vercel: статика + serverless Express + Postgres)
+
 Полноценный **offline-first PWA** трекер расходов на TypeScript: React + Vite на фронте, Node.js + Express + PostgreSQL на бэке. Статьи создаются и читаются даже без сети — изменения копятся в локальной очереди и **автоматически синхронизируются** с сервером при восстановлении соединения.
 
 <table>
